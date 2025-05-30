@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "${PORT:-5001}:${PORT:-5001}"
+    environment:
+      - API_KEY=${API_KEY}
+      - PORT=${PORT:-5001}
+    volumes:
+      - ./secrets/account_service_credentials.json:/etc/secrets/account_service_credentials.json:ro
+    restart: unless-stopped 
