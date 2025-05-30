@@ -93,7 +93,3 @@ serverless deploy
 - In production, consider using AWS Secrets Manager for credentials
 - Update CORS settings in production to restrict origins
 
-## License
-
-[Your License Here]
-
