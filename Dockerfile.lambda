@@ -6,6 +6,10 @@ RUN yum update -y && \
     yum clean all && \
     rm -rf /var/cache/yum
 
+# Install the Lambda Runtime Interface Emulator
+RUN curl -Lo /usr/local/bin/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie-x86_64 && \
+    chmod +x /usr/local/bin/aws-lambda-rie
+
 # Copy requirements first to leverage Docker cache
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -16,5 +20,10 @@ COPY app.py .
 # Create directory for secrets
 RUN mkdir -p /etc/secrets
 
-# Set the Lambda handler
-CMD ["app.handler"] 
+# Copy the entry script
+COPY entry.sh /
+RUN chmod +x /entry.sh
+
+# Set the entrypoint
+ENTRYPOINT [ "/entry.sh" ]
+CMD [ "app.handler" ] 

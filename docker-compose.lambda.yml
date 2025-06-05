@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  lambda:
+    build:
+      context: .
+      dockerfile: Dockerfile.lambda
+    ports:
+      - "9000:8080"
+    environment:
+      - API_KEY=${API_KEY}
+    volumes:
+      - ./secrets/account_service_credentials.json:/etc/secrets/account_service_credentials.json:ro
+    restart: unless-stopped 

@@ -105,6 +105,50 @@ docker build -f Dockerfile.lambda -t google-token-lambda .
 serverless deploy
 ```
 
+## Local Lambda Testing
+
+You can test the Lambda function locally using the AWS Lambda Runtime Interface Emulator:
+
+1. Build and start the Lambda container:
+```bash
+docker-compose -f docker-compose.lambda.yml up --build
+```
+
+2. Test the Lambda function:
+
+### Using curl:
+```bash
+curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{
+    "path": "/google-token",
+    "httpMethod": "GET",
+    "headers": {
+        "X-API-Key": "your-api-key"
+    }
+}'
+```
+
+### Using Postman:
+1. Import the `postman_collection.json` file into Postman
+2. Set up an environment variable:
+   - Create a new environment
+   - Add a variable named `api_key` with your API key value
+3. Send the request:
+   - Method: `POST`
+   - URL: `http://localhost:9000/2015-03-31/functions/function/invocations`
+   - Headers: `Content-Type: application/json`
+   - Body (raw JSON):
+   ```json
+   {
+       "path": "/google-token",
+       "httpMethod": "GET",
+       "headers": {
+           "X-API-Key": "{{api_key}}"
+       }
+   }
+   ```
+
+The Lambda function will be available at `http://localhost:9000`. The Runtime Interface Emulator will simulate the AWS Lambda environment locally.
+
 ## Security Notes
 
 - Never commit your `.env` file or service account credentials
