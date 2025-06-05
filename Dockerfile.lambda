@@ -1,0 +1,20 @@
+FROM public.ecr.aws/lambda/python:3.9
+
+# Install system dependencies
+RUN yum update -y && \
+    yum groupinstall -y "Development Tools" && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+
+# Copy requirements first to leverage Docker cache
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
+COPY app.py .
+
+# Create directory for secrets
+RUN mkdir -p /etc/secrets
+
+# Set the Lambda handler
+CMD ["app.handler"] 

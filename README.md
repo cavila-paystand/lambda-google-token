@@ -47,6 +47,20 @@ docker-compose up --build
 
 The service will be available at `http://localhost:5001`
 
+## Docker Files
+
+The project includes two Dockerfiles for different purposes:
+
+- `Dockerfile`: Used for local development with Docker Compose
+  - Based on `python:3.9-slim`
+  - Runs the FastAPI application with uvicorn
+  - Exposes port 5001
+
+- `Dockerfile.lambda`: Used for AWS Lambda deployment
+  - Based on `public.ecr.aws/lambda/python:3.9`
+  - Configured for AWS Lambda environment
+  - Uses Lambda handler
+
 ## API Documentation
 
 Once the service is running, you can access:
@@ -81,7 +95,12 @@ Response:
 npm install -g serverless
 ```
 
-2. Deploy to AWS:
+2. Build the Lambda container:
+```bash
+docker build -f Dockerfile.lambda -t google-token-lambda .
+```
+
+3. Deploy to AWS:
 ```bash
 serverless deploy
 ```

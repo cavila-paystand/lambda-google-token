@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 
 # Create directory for secrets
-RUN mkdir -p /secrets
+RUN mkdir -p /etc/secrets
 
 # Set environment variables
 ENV PORT=5001
